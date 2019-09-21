@@ -20,8 +20,6 @@ window.onload = function(){
     let mainContainer = document.getElementById("container");
     const maxHeight = mainContainer.clientHeight;
 
-    console.log(maxHeight);
-
     let innerContainer = document.getElementById("content");
 
     let bool = false;
@@ -30,7 +28,6 @@ window.onload = function(){
         if ( innerContainer.clientHeight < maxHeight ) {
             bool = true;
             innerContainer.innerHTML += "<p>"+dummyContentGenerator.generateParagraphs(1)+"</p>";
-            console.log(innerContainer.clientHeight);
         } else {
             bool = false;
         }

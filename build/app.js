@@ -1000,14 +1000,12 @@ window.onload = function () {
     o.show();
     var mainContainer = document.getElementById("container");
     var maxHeight = mainContainer.clientHeight;
-    console.log(maxHeight);
     var innerContainer = document.getElementById("content");
     var bool = false;
     do {
         if (innerContainer.clientHeight < maxHeight) {
             bool = true;
             innerContainer.innerHTML += "<p>" + dummyContentGenerator.generateParagraphs(1) + "</p>";
-            console.log(innerContainer.clientHeight);
         }
         else {
             bool = false;
