@@ -1,0 +1,17 @@
+body{
+    margin: auto;
+    width: 80%
+}
+
+header{
+    text-align: center;
+}
+
+footer{
+    text-align: right;
+}
+
+#container{
+    height: 3000px;
+    overflow: hidden
+}

@@ -20,6 +20,7 @@
 	"homepage": "https://github.com/lechst/ts-test-task#readme",
 	"devDependencies": {
 		"http-server": "^0.11.1",
+		"lorem-ipsum": "^2.0.3",
 		"ts-loader": "^6.1.0",
 		"typescript": "^3.6.3",
 		"webpack": "^4.40.2",
