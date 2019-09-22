@@ -1,4 +1,3 @@
-import Msg from './Message';
 import { LoremIpsum } from "lorem-ipsum";
 
 window.onload = function(){
@@ -13,10 +12,6 @@ window.onload = function(){
             min: 4
         }
     });
-
-
-    let o = new Msg();
-    o.show();
 
 
     let mainContainer = document.getElementById("container");
@@ -76,10 +71,39 @@ window.onload = function(){
             document.getElementsByTagName("video")[0].pause();
         }
 
-        console.log(videoVisibleHeightFraction);
-
     }
 
     window.addEventListener('scroll', videoScrollVisibility, false);
+
+
+    let videoDuration0 = false;
+    let videoDuration25 = false;
+    let videoDuration50 = false;
+    let videoDuration75 = false;
+    let videoDuration100 = false;
+
+    document.getElementsByTagName("video")[0].addEventListener("timeupdate", function(){
+
+        if(this.currentTime >= 0 && !videoDuration0) {
+            console.log("Video has started.");
+            videoDuration0 = true;
+        }
+        if(this.currentTime >= 0.25*video.duration && !videoDuration25) {
+            console.log("Video has played through 25% of the full video length.");
+            videoDuration25 = true;
+        }
+        if(this.currentTime >= 0.50*video.duration && !videoDuration50) {
+            console.log("Video has played through 50% of the full video length.");
+            videoDuration50 = true;
+        }
+        if(this.currentTime >= 0.75*video.duration && !videoDuration75) {
+            console.log("Video has played through 75% of the full video length.");
+            videoDuration75 = true;
+        }
+        if(this.currentTime >= video.duration && !videoDuration100) {
+            console.log("Video has played through 100% of the full video length.");
+            videoDuration100 = true;
+        }
+    });
 
 };

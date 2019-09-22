@@ -950,29 +950,6 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ "./src/Message.ts":
-/*!************************!*\
-  !*** ./src/Message.ts ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Message = /** @class */ (function () {
-    function Message() {
-    }
-    Message.prototype.show = function () {
-        console.log("Hello world!");
-    };
-    return Message;
-}());
-exports.default = Message;
-
-
-/***/ }),
-
 /***/ "./src/app.ts":
 /*!********************!*\
   !*** ./src/app.ts ***!
@@ -983,7 +960,6 @@ exports.default = Message;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Message_1 = __webpack_require__(/*! ./Message */ "./src/Message.ts");
 var lorem_ipsum_1 = __webpack_require__(/*! lorem-ipsum */ "./node_modules/lorem-ipsum/dist/index.js");
 window.onload = function () {
     var dummyContentGenerator = new lorem_ipsum_1.LoremIpsum({
@@ -996,8 +972,6 @@ window.onload = function () {
             min: 4
         }
     });
-    var o = new Message_1.default();
-    o.show();
     var mainContainer = document.getElementById("container");
     var maxHeight = mainContainer.clientHeight;
     var innerContainer = document.getElementById("content");
@@ -1039,9 +1013,35 @@ window.onload = function () {
         else {
             document.getElementsByTagName("video")[0].pause();
         }
-        console.log(videoVisibleHeightFraction);
     }
     window.addEventListener('scroll', videoScrollVisibility, false);
+    var videoDuration0 = false;
+    var videoDuration25 = false;
+    var videoDuration50 = false;
+    var videoDuration75 = false;
+    var videoDuration100 = false;
+    document.getElementsByTagName("video")[0].addEventListener("timeupdate", function () {
+        if (this.currentTime >= 0 && !videoDuration0) {
+            console.log("Video has started.");
+            videoDuration0 = true;
+        }
+        if (this.currentTime >= 0.25 * video.duration && !videoDuration25) {
+            console.log("Video has played through 25% of the full video length.");
+            videoDuration25 = true;
+        }
+        if (this.currentTime >= 0.50 * video.duration && !videoDuration50) {
+            console.log("Video has played through 50% of the full video length.");
+            videoDuration50 = true;
+        }
+        if (this.currentTime >= 0.75 * video.duration && !videoDuration75) {
+            console.log("Video has played through 75% of the full video length.");
+            videoDuration75 = true;
+        }
+        if (this.currentTime >= video.duration && !videoDuration100) {
+            console.log("Video has played through 100% of the full video length.");
+            videoDuration100 = true;
+        }
+    });
 };
 
 
