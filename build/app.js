@@ -1006,6 +1006,9 @@ window.onload = function () {
     var video = document.createElement("video");
     video.src = "https://cdn.yoc.com/ad/demo/airbnb.mp4";
     video.setAttribute("controls", "controls");
+    var videoTopPosition;
+    var videoOffsetHeight;
+    var videoBottomPosition;
     do {
         if (innerContainer.clientHeight < maxHeight) {
             bool = true;
@@ -1013,12 +1016,28 @@ window.onload = function () {
             if ((innerContainer.clientHeight > maxHeight / 2) && check) {
                 innerContainer.appendChild(video);
                 check = false;
+                videoTopPosition = video.offsetTop;
+                videoOffsetHeight = video.offsetHeight;
+                videoBottomPosition = videoTopPosition + videoOffsetHeight;
             }
         }
         else {
             bool = false;
         }
     } while (bool);
+    var videoVisibleFraction = 0.5;
+    function videoScrollVisibility() {
+        var videoVisibleHeight = Math.max(0, Math.min(videoOffsetHeight, window.pageYOffset + window.innerHeight - videoTopPosition, videoBottomPosition - window.pageYOffset));
+        var videoVisibleHeightFraction = videoVisibleHeight / videoOffsetHeight;
+        if (videoVisibleHeightFraction > videoVisibleFraction) {
+            video.play();
+        }
+        else {
+            video.pause();
+        }
+        console.log(videoVisibleHeightFraction);
+    }
+    window.addEventListener('scroll', videoScrollVisibility, false);
 };
 
 
