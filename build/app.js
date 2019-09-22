@@ -1002,10 +1002,18 @@ window.onload = function () {
     var maxHeight = mainContainer.clientHeight;
     var innerContainer = document.getElementById("content");
     var bool = false;
+    var check = true;
+    var video = document.createElement("video");
+    video.src = "https://cdn.yoc.com/ad/demo/airbnb.mp4";
+    video.setAttribute("controls", "controls");
     do {
         if (innerContainer.clientHeight < maxHeight) {
             bool = true;
             innerContainer.innerHTML += "<p>" + dummyContentGenerator.generateParagraphs(1) + "</p>";
+            if ((innerContainer.clientHeight > maxHeight / 2) && check) {
+                innerContainer.appendChild(video);
+                check = false;
+            }
         }
         else {
             bool = false;

@@ -14,22 +14,27 @@ footer{
 
 #container{
     margin: auto;
-    height: 3000px;
+    height: 3072px;
     overflow: hidden
 }
 
-@media (max-width: 1000px) {
+video{
+    margin: auto;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
     #container { width: 100%; }
 }
 
-@media (min-width: 1000px) and (max-width: 1500px) {
-    #container { width:75%; }
+@media (min-width: 768px) and (max-width: 992px) {
+    #container { width:90%; }
 }
 
-@media (min-width: 1500px) and (max-width: 2000px) {
+@media (min-width: 992px) and (max-width: 1200px) {
+    #container { width: 75%; }
+}
+
+@media (min-width: 1200px) {
     #container { width: 50%; }
-}
-
-@media (min-width: 2000px) {
-    #container { width: 25%; }
 }
