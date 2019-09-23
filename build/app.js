@@ -962,6 +962,7 @@ process.umask = function() { return 0; };
 Object.defineProperty(exports, "__esModule", { value: true });
 var lorem_ipsum_1 = __webpack_require__(/*! lorem-ipsum */ "./node_modules/lorem-ipsum/dist/index.js");
 window.onload = function () {
+    // create dummy content generator
     var dummyContentGenerator = new lorem_ipsum_1.LoremIpsum({
         sentencesPerParagraph: {
             max: 8,
@@ -972,11 +973,7 @@ window.onload = function () {
             min: 4
         }
     });
-    var mainContainer = document.getElementById("container");
-    var maxHeight = mainContainer.clientHeight;
-    var innerContainer = document.getElementById("content");
-    var bool = false;
-    var check = true;
+    // create video and set its options
     var video = document.createElement("video");
     video.src = "https://cdn.yoc.com/ad/demo/airbnb.mp4";
     video.id = "video";
@@ -984,29 +981,48 @@ window.onload = function () {
     video.setAttribute("preload", "auto");
     video.setAttribute("muted", "true");
     video.setAttribute("playsinline", "true");
+    // main container for website's text and video
+    var mainContainer = document.getElementById("container");
+    var maxHeight = mainContainer.clientHeight;
+    // div for generated dummy content and video
+    var innerContainer = document.getElementById("content");
+    // check if the inner container height doesn't exceed the main container height
+    var checkInnerContainerHeight = false;
+    // check if the inner container height exceeds half of the main container height
+    var checkVideoPosition = true;
+    // video's position parameters
     var videoTopPosition;
     var videoOffsetHeight;
     var videoBottomPosition;
+    // generate dummy content and append video in the middle
     do {
         if (innerContainer.clientHeight < maxHeight) {
-            bool = true;
+            checkInnerContainerHeight = true;
+            // use dummy content generator
             innerContainer.innerHTML += "<p>" + dummyContentGenerator.generateParagraphs(1) + "</p>";
-            if ((innerContainer.clientHeight > maxHeight / 2) && check) {
+            // append video in the middle
+            if ((innerContainer.clientHeight > maxHeight / 2) && checkVideoPosition) {
                 innerContainer.appendChild(video);
-                check = false;
+                checkVideoPosition = false;
                 videoTopPosition = video.offsetTop;
                 videoOffsetHeight = video.offsetHeight;
                 videoBottomPosition = videoTopPosition + videoOffsetHeight;
             }
         }
         else {
-            bool = false;
+            checkInnerContainerHeight = false;
         }
-    } while (bool);
+    } while (checkInnerContainerHeight);
+    // check if some fraction of the video is in the viewport and start/stop playing accordingly
+    // what fraction of the video should be in the viewport in order to start playing it
     var videoVisibleFraction = 0.5;
+    // video started playing
     var videoPlayedCheck = false;
+    // video stopped playing
     var videoPausedCheck = true;
+    // video current time once it started playing again
     var videoPlayTime = 0;
+    // checks if viewability standards message was already displayed
     var videoViewabilityMessage = false;
     function videoScrollVisibility() {
         var videoVisibleHeight = Math.max(0, Math.min(videoOffsetHeight, window.pageYOffset + window.innerHeight - videoTopPosition, videoBottomPosition - window.pageYOffset));
@@ -1016,16 +1032,15 @@ window.onload = function () {
             videoPlayedCheck = true;
             videoPausedCheck = false;
             videoPlayTime = document.getElementsByTagName("video")[0].currentTime;
-            console.log("play " + document.getElementsByTagName("video")[0].currentTime);
         }
         else if (videoVisibleHeightFraction <= videoVisibleFraction && videoPlayedCheck) {
             document.getElementsByTagName("video")[0].pause();
             videoPlayedCheck = false;
             videoPausedCheck = true;
-            console.log("pause " + document.getElementsByTagName("video")[0].currentTime);
         }
     }
     window.addEventListener('scroll', videoScrollVisibility, false);
+    // check if the video has started or played through 25%, 50%, 75% and 100%
     var videoDuration0 = false;
     var videoDuration25 = false;
     var videoDuration50 = false;
@@ -1052,6 +1067,7 @@ window.onload = function () {
             console.log("Video has played through 100% of the full video length.");
             videoDuration100 = true;
         }
+        // check if 50 percent of a player is in view for at least two seconds
         if (!videoViewabilityMessage) {
             if (this.currentTime - videoPlayTime > 2) {
                 console.log("IAB/MRC viewability standards were met: 50 percent of a player was in view for at least two seconds!");
