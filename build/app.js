@@ -1004,14 +1004,25 @@ window.onload = function () {
         }
     } while (bool);
     var videoVisibleFraction = 0.5;
+    var videoPlayedCheck = false;
+    var videoPausedCheck = true;
+    var videoPlayTime = 0;
+    var videoViewabilityMessage = false;
     function videoScrollVisibility() {
         var videoVisibleHeight = Math.max(0, Math.min(videoOffsetHeight, window.pageYOffset + window.innerHeight - videoTopPosition, videoBottomPosition - window.pageYOffset));
         var videoVisibleHeightFraction = videoVisibleHeight / videoOffsetHeight;
-        if (videoVisibleHeightFraction > videoVisibleFraction) {
+        if (videoVisibleHeightFraction > videoVisibleFraction && videoPausedCheck) {
             document.getElementsByTagName("video")[0].play();
+            videoPlayedCheck = true;
+            videoPausedCheck = false;
+            videoPlayTime = document.getElementsByTagName("video")[0].currentTime;
+            console.log("play " + document.getElementsByTagName("video")[0].currentTime);
         }
-        else {
+        else if (videoVisibleHeightFraction <= videoVisibleFraction && videoPlayedCheck) {
             document.getElementsByTagName("video")[0].pause();
+            videoPlayedCheck = false;
+            videoPausedCheck = true;
+            console.log("pause " + document.getElementsByTagName("video")[0].currentTime);
         }
     }
     window.addEventListener('scroll', videoScrollVisibility, false);
@@ -1040,6 +1051,12 @@ window.onload = function () {
         if (this.currentTime >= video.duration && !videoDuration100) {
             console.log("Video has played through 100% of the full video length.");
             videoDuration100 = true;
+        }
+        if (!videoViewabilityMessage) {
+            if (this.currentTime - videoPlayTime > 2) {
+                console.log("IAB/MRC viewability standards were met: 50 percent of a player was in view for at least two seconds!");
+                videoViewabilityMessage = true;
+            }
         }
     });
 };

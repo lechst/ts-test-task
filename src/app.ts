@@ -59,16 +59,29 @@ window.onload = function(){
 
     let videoVisibleFraction = 0.5;
 
+
+    let videoPlayedCheck = false;
+    let videoPausedCheck = true;
+    let videoPlayTime = 0;
+    let videoViewabilityMessage = false;
+
     function videoScrollVisibility() {
 
         let videoVisibleHeight = Math.max(0, Math.min(videoOffsetHeight, window.pageYOffset + window.innerHeight - videoTopPosition, videoBottomPosition - window.pageYOffset));
 
         let videoVisibleHeightFraction = videoVisibleHeight / videoOffsetHeight;
 
-        if (videoVisibleHeightFraction > videoVisibleFraction) {
+        if ( videoVisibleHeightFraction > videoVisibleFraction && videoPausedCheck ) {
             document.getElementsByTagName("video")[0].play();
-        } else {
+            videoPlayedCheck = true;
+            videoPausedCheck = false;
+            videoPlayTime = document.getElementsByTagName("video")[0].currentTime;
+            console.log("play "+document.getElementsByTagName("video")[0].currentTime);
+        } else if ( videoVisibleHeightFraction <= videoVisibleFraction && videoPlayedCheck ) {
             document.getElementsByTagName("video")[0].pause();
+            videoPlayedCheck = false;
+            videoPausedCheck = true;
+            console.log("pause "+document.getElementsByTagName("video")[0].currentTime);
         }
 
     }
@@ -84,26 +97,36 @@ window.onload = function(){
 
     document.getElementsByTagName("video")[0].addEventListener("timeupdate", function(){
 
-        if(this.currentTime >= 0 && !videoDuration0) {
+        if( this.currentTime >= 0 && !videoDuration0 ) {
             console.log("Video has started.");
             videoDuration0 = true;
         }
-        if(this.currentTime >= 0.25*video.duration && !videoDuration25) {
+        if( this.currentTime >= 0.25*video.duration && !videoDuration25 ) {
             console.log("Video has played through 25% of the full video length.");
             videoDuration25 = true;
         }
-        if(this.currentTime >= 0.50*video.duration && !videoDuration50) {
+        if( this.currentTime >= 0.50*video.duration && !videoDuration50 ) {
             console.log("Video has played through 50% of the full video length.");
             videoDuration50 = true;
         }
-        if(this.currentTime >= 0.75*video.duration && !videoDuration75) {
+        if( this.currentTime >= 0.75*video.duration && !videoDuration75 ) {
             console.log("Video has played through 75% of the full video length.");
             videoDuration75 = true;
         }
-        if(this.currentTime >= video.duration && !videoDuration100) {
+        if( this.currentTime >= video.duration && !videoDuration100 ) {
             console.log("Video has played through 100% of the full video length.");
             videoDuration100 = true;
         }
+
+        if( !videoViewabilityMessage ){
+
+            if( this.currentTime - videoPlayTime > 2 ){
+                console.log("IAB/MRC viewability standards were met: 50 percent of a player was in view for at least two seconds!");
+                videoViewabilityMessage = true;
+            }
+
+        }
+
     });
 
 };
